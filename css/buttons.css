@@ -1,0 +1,22 @@
+.btn {
+    display: flex;
+    height: 27px;
+    padding: 0 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    color: white;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: 0.5px;
+    font-family: inherit;
+}
+
+.btn-primary {
+    border-radius: 4px;
+    border: 1px solid #000;
+    background: var(--primary-color);
+}

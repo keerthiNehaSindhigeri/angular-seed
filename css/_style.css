@@ -1,0 +1,8 @@
+:root {
+    --primary-color: #316FA3;
+    --font-family: "Roboto Slab", serif;
+}
+
+body {
+    font-family: var(--font-family);
+}
