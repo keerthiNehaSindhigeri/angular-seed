@@ -3,8 +3,25 @@ table {
     border-collapse: collapse;
 }
 
-table,
-td,
-th {
-    border: 1px solid #000;
+table thead th,
+table tfoot tr td {
+    background: var(--primary-color);
+    font-size: 12px;
+    border: 1px solid #8db3d1;
+    padding: 4px 10px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+table tfoot tr td {
+    border: 1px solid black;
+}
+
+table tbody tr td {
+    font-size: 12px;
+    border-width: 1px;
+    border-style: solid;
+    padding: 2px;
+    height: 16px;
+    text-align: right;
 }

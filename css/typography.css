@@ -1,0 +1,11 @@
+:root {
+    --text-error: #ff0000;
+}
+
+.text-error {
+    color: var(--text-error);
+}
+
+.fw-700 {
+    font-weight: 700;
+}
