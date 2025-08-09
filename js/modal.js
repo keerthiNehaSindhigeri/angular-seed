@@ -1,6 +1,7 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Queries all the close buttons inside a modal's footer and attaches click handlers to hide the modal when clicked
     const modalCloseButtons = document.querySelectorAll('.modal .modal-footer button.close');
 
     modalCloseButtons.forEach(button => {

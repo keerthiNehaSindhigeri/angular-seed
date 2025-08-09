@@ -31,7 +31,10 @@
 
             <!-- Modal Body -->
             <div class="modal-body">
-                <h4>Invoice Exceptions 12 May 2025</h4>
+                <div class="d-flex align-items-end justify-content-between">
+                    <h4>Invoice Exceptions 12 May 2025</h4>
+                    <button class="btn btn-primary">AI Audit</button>
+                </div>
 
                 <table class="mb-16">
                     <thead>
@@ -142,30 +145,30 @@
                 </table>
 
                 <h4>Comments For 12 May 2025</h4>
-               
+
                 <div class="d-flex">
                     <div>
-                         <table>
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>User</th>
-                            <th>Comment Type</th>
-                            <th>Reference Date</th>
-                            <th>Comments</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>User</th>
+                                    <th>Comment Type</th>
+                                    <th>Reference Date</th>
+                                    <th>Comments</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
 
-                    <tbody>
-                        <tr>
-                            <td colspan="7" class="text-start">
-                                No records found.
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                            <tbody>
+                                <tr>
+                                    <td colspan="7" class="text-start">
+                                        No records found.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div></div>
                 </div>
@@ -186,7 +189,7 @@
 
     <script src="../js/modal.js" defer></script>
 
-        <script>
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
             const showModalBtn = document.getElementById('show-modal-btn');
             const invoiceExceptionsModal = document.getElementById('invoice-exceptions-modal');
