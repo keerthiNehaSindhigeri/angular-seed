@@ -25,3 +25,8 @@ table tbody tr td {
     height: 16px;
     text-align: right;
 }
+
+table tbody tr:hover {
+    background-color: #eeeeee;
+    color: #000000;
+}
