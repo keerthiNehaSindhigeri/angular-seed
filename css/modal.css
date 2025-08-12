@@ -31,7 +31,7 @@
     background-color: #fefefe;
     margin: auto;
     border: 1px solid #000000;
-    width: 80%;
+    /* width: 80%; */
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.8);
     border-radius: 6px;
 }
@@ -54,3 +54,4 @@
 .modal-footer {
     margin-bottom: 6px;
 }
+

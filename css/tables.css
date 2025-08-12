@@ -7,7 +7,7 @@ table thead th,
 table tfoot tr td {
     background: var(--primary-color);
     font-size: 12px;
-    border: 1px solid #8db3d1;
+    border: 1px solid black;
     padding: 4px 10px;
     font-weight: bold;
     color: #ffffff;
@@ -29,4 +29,7 @@ table tbody tr td {
 table tbody tr:hover {
     background-color: #eeeeee;
     color: #000000;
+}
+table tr:nth-child(even) {
+  background-color: #F2F5F9;
 }

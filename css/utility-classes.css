@@ -216,6 +216,9 @@
 .m-8 {
     margin: 8px;
 }
+.m-10{
+    margin: 10px;
+}
 
 .m-12 {
     margin: 12px;
@@ -331,7 +334,9 @@
 .mb-0 {
     margin-bottom: 0;
 }
-
+.mb-2{
+    margin-bottom: 2;
+}
 .mb-4 {
     margin-bottom: 4px;
 }
@@ -380,6 +385,7 @@
 .ml-8 {
     margin-left: 8px;
 }
+
 
 .ml-12 {
     margin-left: 12px;

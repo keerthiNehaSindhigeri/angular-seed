@@ -20,3 +20,8 @@
     font-weight: bold;
     color: #ffffff;
 }
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

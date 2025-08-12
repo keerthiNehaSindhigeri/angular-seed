@@ -36,15 +36,28 @@ h4 {
     z-index: 1000;
 }
 
-
-/* Input styles */
 input[type="checkbox"] {
-    height: 18px;
-    width: 18px;
-    cursor: pointer;
+  background-color: white;
+  border: 2px solid black;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  border-radius: 1.5;
+  border-radius: 3px; 
 }
+
+
 
 /* Anchor tag styles */
 .link-olive {
   color: #718d1b;
+}
+
+.grey{
+    color: #3B4B51;
+    font-weight: 500;
+    letter-spacing: 0.15;
+}
+.catskill-white{
+    background-color: #F2F5F9;
 }
