@@ -3,67 +3,61 @@ import { ExceptionModel, ExceptionRow, InvoiceException, InvoiceExceptionsModel,
 // Global audit approval state cache by dateLabel as object keyed by normalized exception type
 const auditApprovalState = {}; // { [dateLabel]: { [normalizedExceptionType]: confidenceString } }
 
-function normaliseType(str) {
-  return String(str || "").trim().toLowerCase().replace(/[\s\-]+/g, "");
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   renderExceptions(exceptionModel);
   initOccupancyReportRequest();
 });
+//as we need same data for audit table as well we are using cache for invoice exceptions
+const invoiceExceptionsCache = {};
 
-const exceptionModel = new ExceptionModel("May", 30, [
-  new ExceptionRow(
-    "Hotel Occ. (95% Required)",
-    "../assets/icons/help-icon_16.png",
-    { 1: 7, 3: 13, 5: 5, 8: 11, 10: 3, 13: 14, 14: 9 }
-  ),
-  new ExceptionRow(
-    "Billable No-Shows",
-    "../assets/icons/help-icon_16.png",
-    { 12: 1, 14: 1, 26: 1 }
-  ),
-  new ExceptionRow(
-    "Crew ID Issues",
-    "../assets/icons/help-icon_16.png",
-    { 31: 4, 1: 1, 2: 2, 5: 2, 6: 1, 10: 1, 11: 2, 17: 1, 23: 1, 24: 1 }
-  ),
-  new ExceptionRow(
-    "Walk-Ins",
-    "../assets/icons/help-icon_16.png",
-    {}
-  ),
-  new ExceptionRow(
-    "Modified Reservations",
-    "../assets/icons/help-icon_16.png",
-    {}
-  ),
-  new ExceptionRow(
-    "Day-Rooms",
-    "../assets/icons/help-icon_16.png",
-    { 1: 7, 2: 6, 3: 6, 4: 2, 5: 6, 6: 4, 7: 6, 8: 6, 9: 6, 10: 2, 11: 2, 12: 10, 13: 17, 14: 6, 15: 6, 16: 8, 17: 6, 18: 6, 19: 6, 20: 6, 21: 7, 22: 6, 23: 6, 24: 6, 25: 8, 26: 6, 27: 6, 28: 6, 29: 6 }
-  )
-]);
+
+const exceptionTitles = [
+  "Hotel Occ. (95% Required)",
+  "Billable No-Shows",
+  "Crew ID Issues",
+  "Walk-Ins",
+  "Modified Reservations",
+  "Day-Rooms"
+];
+
+const helperIcon = "../assets/icons/help-icon_16.png";
+const exceptionValues = [
+  { 1: 7, 3: 13, 5: 5, 8: 11, 10: 3, 13: 14, 14: 9 },
+  { 12: 1, 14: 1, 26: 1 },
+  { 31: 4, 1: 1, 2: 2, 5: 2, 6: 1, 10: 1, 11: 2, 17: 1, 23: 1, 24: 1 },
+  {},
+  {},
+  { 1: 7, 2: 6, 3: 6, 4: 2, 5: 6, 6: 4, 7: 6, 8: 6, 9: 6, 10: 2, 11: 2, 12: 10, 13: 17, 14: 6, 15: 6, 16: 8, 17: 6, 18: 6, 19: 6, 20: 6, 21: 7, 22: 6, 23: 6, 24: 6, 25: 8, 26: 6, 27: 6, 28: 6, 29: 6 }
+];
+
+const exceptionRows = exceptionTitles.map((title, idx) =>
+  new ExceptionRow(title, helperIcon, exceptionValues[idx])
+);
+const exceptionModel = new ExceptionModel("May", 30, exceptionRows);
+
 
 // Dynamic invoice exceptions generation from exceptionModel and clicked date
 function getInvoiceExceptionsDetailsModel({ dateLabel }) {
+  if (invoiceExceptionsCache[dateLabel]) {
+    return invoiceExceptionsCache[dateLabel];
+  }
+
   const dayMatch = dateLabel.match(/\b(\d{1,2})\b/);
   if (!dayMatch) return new InvoiceExceptionsModel(`Invoice Exceptions ${dateLabel}`, [], `Comments For ${dateLabel}`, []);
   const day = parseInt(dayMatch[1], 10);
   const yearMatch = dateLabel.match(/\b(\d{4})\b/);
-  const year = yearMatch ? yearMatch : '2025';  // Corrected: Use first matched value, not whole array
+  const year = yearMatch ? yearMatch : '2025';
   const monthName = exceptionModel.monthName;
 
   let rows = [];
 
   exceptionModel.rows.forEach(exceptionRow => {
-    if (exceptionRow.title === "Hotel Occ. (95% Required)") return;  // Skip hotel occupancy
+    const exception = exceptionRow.title;
+    if (exception === "Hotel Occ. (95% Required)") return;
 
     const count = exceptionRow.values[day] || 0;
     if (count > 0) {
-      const normType = normaliseType(exceptionRow.title);
-
-      const isApproved = isExceptionApproved(auditApprovalState, dateLabel, exceptionRow.title);
+      // Approvals logic remains as before
 
       for (let i = 0; i < count; i++) {
         const checkIn = `${monthName} ${day}, ${year} 07:00`;
@@ -73,16 +67,12 @@ function getInvoiceExceptionsDetailsModel({ dateLabel }) {
         let expectedIds = String(Math.floor(100000 + Math.random() * 900000));
         let names = `Crew ${i + 1}`;
 
-        if (normType === "billablenoshows") {
+        if (exception === "Billable No-Shows") {
           enteredIds = "No Show";
-
         }
-        else if (normType === "crewidissues") {
-          // Generate expected ID
+        else if (exception === "Crew ID Issues") {
           const expectedID = String(Math.floor(100000 + Math.random() * 900000));
-          // Generate entered ID, sometimes matching, sometimes mismatching:
           let enteredID;
-
           do {
             enteredID = String(Math.floor(100000 + Math.random() * 900000));
           } while (enteredID === expectedID);
@@ -92,8 +82,6 @@ function getInvoiceExceptionsDetailsModel({ dateLabel }) {
           enteredIds = expectedIds;
         }
 
-        console.log(`[Invoice Exception] Day ${day} Type: ${exceptionRow.title}, Names: ${names}, ExpectedIds: ${expectedIds}, EnteredIds: ${enteredIds}, Approved: ${isApproved}`);
-
         rows.push(new InvoiceException(
           checkIn,
           checkOut,
@@ -101,20 +89,25 @@ function getInvoiceExceptionsDetailsModel({ dateLabel }) {
           expectedIds,
           enteredIds,
           {
-            billableNoShow: normType === "billablenoshows",
-            modifiedReservations: normType === normaliseType("Modified Reservations"),
-            walkIn: normType === normaliseType("Walk-Ins"),
-            dayRooms: normType === normaliseType("Day-Rooms"),
+            noShow: exception === "Billable No-Shows",
+            modifiedReservations: exception === "Modified Reservations",
+            walkIn: exception === "Walk-Ins",
+            dayRooms: exception === "Day-Rooms",
             nonContractRate: false,
-            autoApproved: isApproved
-          }
+            autoApproved: isExceptionApproved(auditApprovalState, dateLabel)
+          },
+          exception
         ));
       }
     }
   });
 
-  return new InvoiceExceptionsModel(`Invoice Exceptions ${dateLabel}`, rows, `Comments For ${dateLabel}`, []);
+  const model = new InvoiceExceptionsModel(`Invoice Exceptions ${dateLabel}`, rows, `Comments For ${dateLabel}`, []);
+  invoiceExceptionsCache[dateLabel] = model; // Cache the model for reuse
+  return model;
 }
+
+
 function renderInvoiceExceptionsModal({ dateLabel }) {
   currentInvoiceModalDateLabel = dateLabel;
 
@@ -160,7 +153,7 @@ function renderInvoiceExceptionsModal({ dateLabel }) {
 </td>
 
 
-       <td class="text-center">${r.billableNoShow ? `<input type="checkbox" class="invoice-checkbox" data-exception="Billable No-Shows" ${r.autoApproved ? 'checked' : ''}>` : ""}</td>
+       <td class="text-center">${r.noShow ? `<input type="checkbox" class="invoice-checkbox" data-exception="Billable No-Shows" ${r.autoApproved ? 'checked' : ''}>` : ""}</td>
     <td class="text-center">${r.modifiedReservations ? `<input type="checkbox" class="invoice-checkbox" data-exception="Modified Reservations" ${r.autoApproved ? 'checked' : ''}>` : ""}</td>
     <td class="text-center">${r.walkIn ? `<input type="checkbox" class="invoice-checkbox" data-exception="Walk-Ins" ${r.autoApproved ? 'checked' : ''}>` : ""}</td>
     <td class="text-center">${r.dayRooms ? `<input type="checkbox" class="invoice-checkbox" data-exception="Day-Rooms" ${r.autoApproved ? 'checked' : ''}>` : ""}</td>
@@ -172,6 +165,26 @@ function renderInvoiceExceptionsModal({ dateLabel }) {
     </tr>
   `;
   }).join('');
+
+  // Fill comments table body
+  const commentsBody = modal.querySelector('#modal-comments-tbody');
+  if (!commentsBody) return;
+
+  if (model.comments.length === 0) {
+    commentsBody.innerHTML = `<tr><td colspan="7" class="text-start">No records found.</td></tr>`;
+  } else {
+    commentsBody.innerHTML = model.comments.map(c => `
+      <tr>
+        <td>${escapeHtml(c.date)}</td>
+        <td>${escapeHtml(c.user)}</td>
+        <td>${escapeHtml(c.type)}</td>
+        <td>${escapeHtml(c.refDate)}</td>
+        <td>${escapeHtml(c.text)}</td>
+        <td><button class="btn btn-link" data-action="edit-comment" data-id="${c.id}">Edit</button></td>
+        <td><button class="btn btn-link" data-action="delete-comment" data-id="${c.id}">Delete</button></td>
+      </tr>
+    `).join('');
+  }
 
 
   showModal(modal);
@@ -192,7 +205,7 @@ function renderInvoiceExceptionsModal({ dateLabel }) {
         // Store approvals in object format keyed by normalized exception type
         auditApprovalState[dateLabel] = {};
         auditModel.rows.forEach(r => {
-          auditApprovalState[dateLabel][normaliseType(r.exception)] = r.confidence;
+          auditApprovalState[dateLabel][r.exception] = r.confidence;
         });
 
         renderAiAuditResultsModal({ dateLabel });
@@ -260,7 +273,7 @@ function initOccupancyReportRequest() {
     const day = td.getAttribute('data-day');
     if (!day) return;
 
-    const dateLabel = `${exceptionModel.monthName} ${day}, 2025`; // Adjust year dynamically as needed
+    const dateLabel = `${exceptionModel.monthName} ${day}, 2025`;
     showLoader();
     setTimeout(() => {
       hideLoader();
@@ -270,47 +283,41 @@ function initOccupancyReportRequest() {
 }
 
 
-
-
-
 // Generate AI audit results dynamically for exceptions present on date
 function getAiAuditResultsModel({ dateLabel }) {
-  const dayMatch = dateLabel.match(/\b(\d{1,2})\b/);
-  if (!dayMatch) return new AiAuditResultsModel({ dateLabel, rows: [], resolvedCount: 0, manualReviewCount: 0 });
-  const day = parseInt(dayMatch[1], 10);
+  // Get invoice exceptions data for the given date
+  const invoiceModel = getInvoiceExceptionsDetailsModel({ dateLabel });
+  const invoiceRows = invoiceModel.rows;
 
-  const rows = [];
+  // Map invoice rows to audit rows, forwarding expectedIds etc.
+  const auditRows = invoiceRows.map((invRow, index) => {
+    const key = `${invRow.names}__${index}`;
+    const confidence = auditApprovalState[dateLabel]?.[key] || "0%";
+    const checked = confidence === "100%";
 
-  exceptionModel.rows.forEach(exceptionRow => {
-    if (exceptionRow.title === "Hotel Occ. (95% Required)") return;
-    const count = exceptionRow.values[day] || 0;
-    const normType = normaliseType(exceptionRow.title);
-    const approvedConfidence = auditApprovalState[dateLabel]?.[normType] || "0%";
-
-    for (let i = 0; i < count; i++) {
-      rows.push(new AiAuditResultRow({
-        exception: exceptionRow.title,
-        names: `Crew ${i + 1}`,      // match invoice exception names if possible
-        expectedIds: "-",            // or real expected id if tracked
-        confidence: approvedConfidence,
-        analysis: approvedConfidence === "100%" ? "Audit approved" : "Needs review",
-        checked: approvedConfidence === "100%",
-        warning: false              // set true if any warning for specific row
-      }));
-    }
+    return new AiAuditResultRow({
+      exception: invRow.exceptionType || invRow.names,
+      names: invRow.names,
+      expectedIds: invRow.expectedIds,
+      enteredIds: invRow.enteredIds,
+      confidence,
+      analysis: checked ? "Audit approved" : "Needs review",
+      checked,
+      warning: false,
+      index
+    });
   });
 
-  const resolvedCount = rows.filter(r => r.checked).length;
-  const manualReviewCount = rows.length - resolvedCount;
+  const resolvedCount = auditRows.filter(row => row.checked).length;
+  const manualReviewCount = auditRows.length - resolvedCount;
 
   return new AiAuditResultsModel({
     dateLabel,
     resolvedCount,
     manualReviewCount,
-    rows
+    rows: auditRows
   });
 }
-
 
 // Add this near the top of your file or inside init function to track current dateLabel for modals
 let currentInvoiceModalDateLabel = null;
@@ -367,14 +374,13 @@ function renderAiAuditResultsModal({ dateLabel }) {
     };
   }
 }
-function isExceptionApproved(auditState, dateLabel, exceptionType) {
+function isExceptionApproved(auditState, dateLabel) {
   const allKeys = Object.keys(auditState[dateLabel] || {});
-  const normType = normaliseType(exceptionType);
 
   // Check if any instance of this exception type is approved
   return allKeys.some(key => {
     const [type, idx] = key.split("__");
-    return normaliseType(type) === normType && auditState[dateLabel][key] === "100%";
+    return auditState[dateLabel][key] === "100%";
   });
 }
 

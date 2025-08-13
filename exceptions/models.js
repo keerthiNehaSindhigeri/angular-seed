@@ -16,17 +16,18 @@ export class ExceptionModel {
 }
 
 export class InvoiceException {
-    constructor(checkIn, checkOut, names, expectedIds, enteredIds, options = {}) {
+    constructor(checkIn, checkOut, names, expectedIds, enteredIds, options = {}, exceptionType) {
         this.checkIn = checkIn;
         this.checkOut = checkOut;
         this.names = names;
         this.expectedIds = expectedIds;
         this.enteredIds = enteredIds;
-        this.billableNoShow = options.billableNoShow || false;
+        this.noShow = options.noShow || false;
         this.modifiedReservations = options.modifiedReservations || false;
         this.walkIn = options.walkIn || false;
         this.dayRooms = options.dayRooms || false;
         this.nonContractRate = options.nonContractRate || false;
+        this.exceptionType = exceptionType;
     }
 }
 
@@ -60,15 +61,15 @@ export class AiAuditResultsModel {
     }
 }
 
-export function getAiAuditResultsModel({ dateLabel }) {
-    return new AiAuditResultsModel({
-        dateLabel,
-        resolvedCount: 7,
-        manualReviewCount: 1,
-        rows: [
-            new AiAuditResultRow({ exception: "No-Show", names: "Crew 1", expectedIds: "123456", confidence: "100%", analysis: "Hotel occupancy report is matching 95%", checked: false }),
-            // other rows...
-            new AiAuditResultRow({ exception: "Day Rooms", names: "Crew 1", expectedIds: "123456", confidence: "0%", analysis: "Hotel occupancy report is matching 95%", checked: false, warning: true }),
-        ]
-    });
+export class getAiAuditResultsModel {
+    contructor({ exception, names, expectedIds, confidence, analysis, checked, warning }) {
+        this.exception = exception;
+        this.names = names;
+        this.expectedIds = expectedIds;
+        this.confidence = confidence;
+        this.analysis = analysis;
+        this.checked = checked;
+        this.warning = warning;
+    }
+
 }
