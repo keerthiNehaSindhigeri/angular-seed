@@ -30,8 +30,11 @@
     <!-- Modals -->
     <div id="invoice-exceptions-modal-report" class="modal">
         <div class="modal-content">
+
             <div class="modal-header">Invoice Exceptions</div>
-            <div class="modal-body">
+            <div id="occupancy-section-container" class="ml-16 mt-12 mb-0"></div>
+
+            <div class="modal-body" style="padding-top: 0;">
                 <div class="d-flex align-items-end justify-content-between mb-4">
                     <h4 id="modal-title"></h4>
                     <button class="btn btn-primary" id="ai-audit-btn">AI Audit</button>
@@ -60,7 +63,7 @@
 
                 <h4 id="modal-comments-title"></h4>
 
-                <table  style="width: 50%;">
+                <table style="width: 50%;">
                     <thead>
                         <tr>
                             <th>Date</th>
@@ -100,9 +103,9 @@
 
     <div id="ai-audit-result-table" class="modal">
         <div class="modal-content">
-            <div class="ml-16 mr-16 mt-12 mb-12">
+            <div>
                 <div class="modal-header">AI Audit Results</div>
-                <div class="mb-12">
+                <div class="mb-12 ml-16 mr-16">
                     <p id="ai-audit-summary"></p>
                 </div>
 
@@ -117,7 +120,7 @@
                     </div>
                 </div>
 
-                <div class="flex-wrap">
+                <div class="flex-wrap ml-16 mr-16 mt-12 mb-12">
                     <table>
                         <thead class="m-10">
                             <tr>
@@ -133,7 +136,7 @@
                     </table>
                 </div>
 
-                <div class="modal-footer d-flex justify-content-end align-items-end mt-12">
+                <div class="modal-footer d-flex justify-content-end align-items-end mt-12 mr-16 mb-16">
                     <button class="btn btn-primary close">Approve</button>
                 </div>
             </div>
