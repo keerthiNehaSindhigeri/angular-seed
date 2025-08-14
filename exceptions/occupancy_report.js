@@ -147,12 +147,12 @@ function getAiAuditResultsModel({ dateLabel }) {
 
 
   const exceptionAnalysisMap = {
-    "Billable No-Shows": () => "Hotel occupancy report is matching ${occupancy !== null ? occupancy + '%' : 'N/A'}",
+    "Billable No-Shows": () => `Hotel occupancy report is matching ${occupancy !== null ? occupancy + '%' : 'N/A'}`,
     "Crew ID Issues": () => "Crew ID mismatch detected",
     "Walk-Ins": () => "Walk-in exceptions require manual confirmation",
     "Modified Reservations": () => "Reservation modified after booking",
     "Day-Rooms": () => "Bill charges comes under the aggrement",
-    "Non-contract Rate": () =>  "Charged price exceeds contract rate due to additional convenience charges added by the Hotel",
+    "Non-contract Rate":()=>  "",
   };
   // Map invoice rows to AI audit rows, using resolvedKeys for checked status
   const auditRows = invoiceRows.map((invRow, index) => {
