@@ -3,6 +3,7 @@ import { ExceptionModel, ExceptionRow, InvoiceException, InvoiceExceptionsModel,
 // Global audit approval state cache by dateLabel as object keyed by normalized exception type
 const auditApprovalState = {};
 const invoiceExceptionsCache = {};
+
 document.addEventListener('DOMContentLoaded', () => {
   renderExceptions(exceptionModel);
   initOccupancyReportRequest();
@@ -18,14 +19,15 @@ const exceptionTitles = [
   "Day-Rooms"
 ];
 
+
 const helperIcon = "../assets/icons/help-icon_16.png";
 const exceptionValues = [
-  { 1: 7, 3: 13, 5: 5, 8: 11, 10: 3, 13: 14, 14: 9 },
-  { 12: 1, 14: 1, 26: 1, 8: 4 },
-  { 31: 4, 1: 1, 2: 2, 5: 2, 6: 1, 10: 1, 11: 2, 17: 1, 23: 1, 24: 1 },
-  { 2: 2, 5: 1 },
-  { 6: 7, 9: 1 },
-  { 1: 7, 2: 6, 3: 6, 4: 2, 5: 6, 6: 4, 7: 6, 8: 6, 9: 6, 10: 2, 11: 2, 12: 10, 13: 17, 14: 6, 15: 6, 16: 8, 17: 6, 18: 6, 19: 6, 20: 6, 21: 7, 22: 6, 23: 6, 24: 6, 25: 8, 26: 6, 27: 6, 28: 6, 29: 6 }
+  { 1: 97, 8: 98, 10: 95,  14: 90, 17: 95, 26:90, },
+  { 1: 2, 10: 1, 14: 1, 26: 1, 8: 4,17:2, },
+  { 1: 1, 31: 4, 1: 1, 2: 2, 5: 2, 6: 1, 10: 1, 11: 2, 17: 1, 23: 1, 24: 1 },
+  { 1: 4, 2: 2, 5: 1 },
+  { 1: 2, 6: 7, 9: 1 },
+  { 1: 3, 2: 6, 3: 6, 4: 2, 5: 6, 6: 4, 7: 6, 8: 6, 9: 6, 10: 2, 11: 2, 12: 10, 13: 17, 14: 6, 15: 6, 16: 8, 17: 6, 18: 6, 19: 6, 20: 6, 21: 7, 22: 6, 23: 6, 24: 6, 25: 8, 26: 6, 27: 6, 28: 6, 29: 6 }
 ];
 
 
@@ -34,7 +36,6 @@ const exceptionRows = exceptionTitles.map((title, idx) =>
 );
 const exceptionModel = new ExceptionModel("May", 30, exceptionRows);
 let currentInvoiceModalDateLabel = null;
-
 
 // invoice exceptions generation
 function getInvoiceExceptionsDetailsModel({ dateLabel }) {
@@ -139,19 +140,33 @@ function getAiAuditResultsModel({ dateLabel }) {
   const invoiceModel = getInvoiceExceptionsDetailsModel({ dateLabel });
   const invoiceRows = invoiceModel.rows;
   const resolvedKeys = invoiceModel.resolvedKeys || {};
+  /// get hotel occupancy percentage
+  const occupancy = getOccupancyPercentage(dateLabel);
 
+
+  const exceptionAnalysisMap = {
+    "Billable No-Shows": () => `Hotel occupancy report is matching ${occupancy !== null ? occupancy + '%' : 'N/A'}`,
+    "Crew ID Issues": () => "Crew ID mismatch detected",
+    "Walk-Ins": () => "Walk-in exceptions require manual confirmation",
+    "Modified Reservations": () => "Reservation modified after booking",
+    "Day-Rooms": () => "Day-room charge applied",
+    "Hotel Occ. (95% Required)": () => "Bill charges comes under the aggrement"
+  };
   // Map invoice rows to AI audit rows, using resolvedKeys for checked status
   const auditRows = invoiceRows.map((invRow, index) => {
     const key = `${invRow.exceptionType}__${index}`;
     const checked = !!resolvedKeys[key];
     const confidence = checked ? "100%" : "0%";
 
+
+    const getAnalysisText = exceptionAnalysisMap[invRow.exceptionType] || ((checked) => (checked ? "Audit approved" : "Needs review"));
+    const analysisText = typeof getAnalysisText === "function" ? getAnalysisText(checked) : getAnalysisText;
     return new AiAuditResultRow({
       exception: invRow.exceptionType || invRow.names,
       names: invRow.names,
       expectedIds: invRow.expectedIds,
       confidence,
-      analysis: checked ? "Audit approved" : "Needs review",
+      analysis: analysisText,
       checked,
       warning: false,
       index
@@ -264,8 +279,6 @@ function renderInvoiceExceptionsModal({ dateLabel }) {
     //validate crew ID issue
     const isWrongID = r.enteredIds !== r.expectedIds && r.enteredIds != "No Show";
     const isNoID = r.enteredIds.trim() === "" || r.enteredIds.toUpperCase() === "NO ID";
-    const showEmptyCheckbox = isNoID || isWrongID;
-    const checkboxChecked = r.autoApproved && !showEmptyCheckbox;
     const idText = !isNoID && isWrongID ? `<span class="ml-2">${escapeHtml(r.enteredIds)}</span>` : "";
 
     return `
@@ -367,8 +380,6 @@ function renderInvoiceExceptionsModal({ dateLabel }) {
 
       const dateLabel = currentInvoiceModalDateLabel;
       const key = `${exceptionType}__${rowIndex}`;
-
-
 
       if (!auditApprovalState[dateLabel]) auditApprovalState[dateLabel] = {};
 
