@@ -309,7 +309,7 @@ function renderInvoiceExceptionsModal({ dateLabel }) {
     <td class="text-center">${r.modifiedReservations ? `<input type="checkbox" class="invoice-checkbox" data-exception="Modified Reservations" ${r.autoApproved ? 'checked' : ''}>` : ""}</td>
     <td class="text-center">${r.walkIn ? `<input type="checkbox" class="invoice-checkbox" data-exception="Walk-Ins" ${r.autoApproved ? 'checked' : ''}>` : ""}</td>
     <td class="text-center">${r.dayRooms ? `<input type="checkbox" class="invoice-checkbox" data-exception="Day-Rooms" ${r.autoApproved ? 'checked' : ''}>` : ""}</td>
-    <td class="text-center">${r.nonContractRate ? `<input type="checkbox" class="invoice-checkbox" data-exception="Non-Contract Rate" ${r.autoApproved ? 'checked' : ''}>` : ""}</td>
+    <td class="text-center">${r.nonContractRate ? `<input type="checkbox" class="invoice-checkbox" data-exception="Non-contract Rate" ${r.autoApproved ? 'checked' : ''}>` : ""}</td>
     <td class="text-center"><a href="#" class="link-olive">Folio</a><a href="#" class="link-olive">Fax</a></td>
     <td class="text-center"><a href="#" class="link-olive">View Details</a></td>
     <td class="text-center cursor-pointer"><img src="../assets/icons/document.png" alt=""></td>
