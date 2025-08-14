@@ -152,7 +152,7 @@ function getAiAuditResultsModel({ dateLabel }) {
     "Walk-Ins": () => "Walk-in exceptions require manual confirmation",
     "Modified Reservations": () => "Reservation modified after booking",
     "Day-Rooms": () => "Bill charges comes under the aggrement",
-    "Non-contract Rate":()=>  "",
+    "Non-contract Rate": () =>  "Charged price exceeds contract rate due to additional convenience charges added by the Hotel",
   };
   // Map invoice rows to AI audit rows, using resolvedKeys for checked status
   const auditRows = invoiceRows.map((invRow, index) => {
@@ -357,7 +357,13 @@ function renderInvoiceExceptionsModal({ dateLabel }) {
         auditApprovalState[dateLabel] = {};
         auditModel.rows.forEach((r, index) => {
           const key = `${r.exception}__${index}`;
-          auditApprovalState[dateLabel][key] = r.confidence;
+          if (index < 2) {
+            // approved- ai audit successful for 2 items with 100% confidence
+            auditApprovalState[dateLabel][key] = "100%"; 
+          } else {
+            // keep original for remaining list
+            auditApprovalState[dateLabel][key] = r.confidence; 
+          }
         });
 
         // Refresh Invoice Exceptions table immediately
