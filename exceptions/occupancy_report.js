@@ -23,8 +23,8 @@ const exceptionTitles = [
 
 const helperIcon = "../assets/icons/help-icon_16.png";
 const exceptionValues = [
-  { 1: 97, 8: 98, 10: 95,  14: 90, 17: 95, 26:90, },
-  { 1: 2, 10: 1, 14: 1, 26: 1, 8: 4,17:2, },
+  { 1: 97, 8: 98, 10: 95, 14: 90, 17: 95, 26: 90, },
+  { 1: 2, 10: 1, 14: 1, 26: 1, 8: 4, 17: 2, },
   { 1: 1, 31: 4, 1: 1, 2: 2, 5: 2, 6: 1, 10: 1, 11: 2, 17: 1, 23: 1, 24: 1 },
   { 1: 4, 2: 2, 5: 1 },
   { 1: 2, 6: 7, 9: 1 },
@@ -149,10 +149,10 @@ function getAiAuditResultsModel({ dateLabel }) {
   const exceptionAnalysisMap = {
     "Billable No-Shows": () => `Hotel occupancy report is matching ${occupancy !== null ? occupancy + '%' : 'N/A'}`,
     "Crew ID Issues": () => "Crew ID mismatch detected",
-    "Walk-Ins": () => "Walk-in exceptions require manual confirmation",
-    "Modified Reservations": () => "Reservation modified after booking",
+    "Walk-Ins": () => "Signature not detected in the sign-in sheet",
+    "Modified Reservations": () => "Rates are inconsistent with the contract value",
     "Day-Rooms": () => "Bill charges comes under the aggrement",
-    "Non-contract Rate": () =>  "Charged price exceeds contract rate due to additional convenience charges added by the Hotel",
+    "Non-contract Rate": () => "Charged price exceeds contract rate due to additional convenience charges added by the Hotel",
   };
   // Map invoice rows to AI audit rows, using resolvedKeys for checked status
   const auditRows = invoiceRows.map((invRow, index) => {
@@ -359,10 +359,10 @@ function renderInvoiceExceptionsModal({ dateLabel }) {
           const key = `${r.exception}__${index}`;
           if (index < 2) {
             // approved- ai audit successful for 2 items with 100% confidence
-            auditApprovalState[dateLabel][key] = "100%"; 
+            auditApprovalState[dateLabel][key] = "100%";
           } else {
             // keep original for remaining list
-            auditApprovalState[dateLabel][key] = r.confidence; 
+            auditApprovalState[dateLabel][key] = r.confidence;
           }
         });
 
@@ -480,7 +480,7 @@ function renderAiAuditResultsModal({ dateLabel }) {
       <td>${escapeHtml(r.names)}</td>
       <td>${escapeHtml(r.expectedIds)}</td>
       <td>${escapeHtml(r.confidence)}</td>
-      <td>${escapeHtml(r.analysis)}</td>
+      <td>${escapeHtml(r.analysis) + '&nbsp;'}  <a href="#" class="blue" ><i class="fa fa-info-circle" aria-hidden="true"></i></a></td>
       <td><input type="checkbox" class="audit-checkbox" data-exception="${escapeHtml(r.exception)}" ${r.checked ? 'checked' : ''}></td>
     </tr>
   `).join('');

@@ -53,6 +53,10 @@ input[type="checkbox"] {
     color: #718d1b;
 }
 
+.blue{
+    color: #2b70a6;
+    font-weight: bold;
+}
 .grey {
     color: #3B4B51;
     font-weight: 500;
