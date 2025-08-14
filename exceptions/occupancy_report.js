@@ -14,6 +14,7 @@ const exceptionTitles = [
   "Hotel Occ. (95% Required)",
   "Billable No-Shows",
   "Crew ID Issues",
+  "Non-contract Rate",
   "Walk-Ins",
   "Modified Reservations",
   "Day-Rooms"
@@ -27,7 +28,7 @@ const exceptionValues = [
   { 1: 1, 31: 4, 1: 1, 2: 2, 5: 2, 6: 1, 10: 1, 11: 2, 17: 1, 23: 1, 24: 1 },
   { 1: 4, 2: 2, 5: 1 },
   { 1: 2, 6: 7, 9: 1 },
-  { 1: 3, 2: 6, 3: 6, 4: 2, 5: 6, 6: 4, 7: 6, 8: 6, 9: 6, 10: 2, 11: 2, 12: 10, 13: 17, 14: 6, 15: 6, 16: 8, 17: 6, 18: 6, 19: 6, 20: 6, 21: 7, 22: 6, 23: 6, 24: 6, 25: 8, 26: 6, 27: 6, 28: 6, 29: 6 }
+  { 1: 3, 2: 6, 3: 6, 4: 2, 5: 6, 6: 4, 7: 6, 8: 6, 9: 6, 10: 2, 11: 2, 12: 10, 13: 11, 14: 6, 15: 6, 16: 8, 17: 6, 18: 6, 19: 6, 20: 6, 21: 7, 22: 6, 23: 6, 24: 6, 25: 8, 26: 6, 27: 6, 28: 6, 29: 6 }
 ];
 
 
@@ -60,7 +61,8 @@ function getInvoiceExceptionsDetailsModel({ dateLabel }) {
 
   const day = parseInt(dayMatch[1], 10);
   const yearMatch = dateLabel.match(/\b(\d{4})\b/);
-  const year = yearMatch ? yearMatch : '2025';
+  const year = '2025';
+  // const year = yearMatch ? yearMatch : '2025';
   const monthName = exceptionModel.monthName;
 
   let rows = [];
@@ -73,8 +75,8 @@ function getInvoiceExceptionsDetailsModel({ dateLabel }) {
     const count = exceptionRow.values[day] || 0;
     if (count > 0) {
       for (let i = 0; i < count; i++) {
-        const checkIn = `${monthName} ${day}, ${year} 07:00`;
-        const checkOut = `${monthName} ${day}, ${year} 04:00`;
+        const checkIn = `${monthName} ${day}, ${year} 04:00`;
+        const checkOut = `${monthName} ${day}, ${year} 9:00`;
 
         let enteredIds = "NO ID";
         let expectedIds = String(Math.floor(100000 + Math.random() * 900000));
@@ -110,9 +112,9 @@ function getInvoiceExceptionsDetailsModel({ dateLabel }) {
           {
             noShow: exception === "Billable No-Shows",
             modifiedReservations: exception === "Modified Reservations",
+            nonContractRate: exception === "Non-contract Rate",
             walkIn: exception === "Walk-Ins",
             dayRooms: exception === "Day-Rooms",
-            nonContractRate: false,
             autoApproved: isApproved
           },
           exception
@@ -145,12 +147,12 @@ function getAiAuditResultsModel({ dateLabel }) {
 
 
   const exceptionAnalysisMap = {
-    "Billable No-Shows": () => `Hotel occupancy report is matching ${occupancy !== null ? occupancy + '%' : 'N/A'}`,
+    "Billable No-Shows": () => "Hotel occupancy report is matching ${occupancy !== null ? occupancy + '%' : 'N/A'}",
     "Crew ID Issues": () => "Crew ID mismatch detected",
     "Walk-Ins": () => "Walk-in exceptions require manual confirmation",
     "Modified Reservations": () => "Reservation modified after booking",
-    "Day-Rooms": () => "Day-room charge applied",
-    "Hotel Occ. (95% Required)": () => "Bill charges comes under the aggrement"
+    "Day-Rooms": () => "Bill charges comes under the aggrement",
+    "Non-contract Rate": () =>  "Charged price exceeds contract rate due to additional convenience charges added by the Hotel",
   };
   // Map invoice rows to AI audit rows, using resolvedKeys for checked status
   const auditRows = invoiceRows.map((invRow, index) => {
