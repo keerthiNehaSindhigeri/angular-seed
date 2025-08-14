@@ -1,0 +1,27 @@
+.btn {
+    font-family: inherit;
+    font-weight: bold;
+    color: #ffffff;
+    padding: .3em 1em;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: .1em;
+}
+
+.btn-primary {
+    border-radius: 6px;
+    border: 1px solid #000000;
+    background: var(--primary-color);
+}
+
+.btn-primary:hover {
+    border: 1px solid #cccccc;
+    background: #599bcf;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
