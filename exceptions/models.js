@@ -33,13 +33,15 @@ export class InvoiceException {
 
 // Array of InvoiceException
 export class InvoiceExceptionsModel {
-    constructor(title, rows = [], commentsTitle = '', comments = []) {
+    constructor(title, rows = [], commentsTitle = '', comments = [], resolvedKeys = {}) {
         this.title = title;
         this.rows = rows;
         this.commentsTitle = commentsTitle;
         this.comments = comments;
+        this.resolvedKeys = resolvedKeys;
     }
 }
+
 
 /// audit results model
 export class AiAuditResultRow {
