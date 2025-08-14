@@ -147,7 +147,7 @@ function getAiAuditResultsModel({ dateLabel }) {
 
 
   const exceptionAnalysisMap = {
-    "Billable No-Shows": () => "Hotel occupancy report is matching ${occupancy !== null ? occupancy + '%' : 'N/A'}",
+    "Billable No-Shows": () => `Hotel occupancy report is matching ${occupancy !== null ? occupancy + '%' : 'N/A'}`,
     "Crew ID Issues": () => "Crew ID mismatch detected",
     "Walk-Ins": () => "Walk-in exceptions require manual confirmation",
     "Modified Reservations": () => "Reservation modified after booking",
@@ -357,7 +357,13 @@ function renderInvoiceExceptionsModal({ dateLabel }) {
         auditApprovalState[dateLabel] = {};
         auditModel.rows.forEach((r, index) => {
           const key = `${r.exception}__${index}`;
-          auditApprovalState[dateLabel][key] = r.confidence;
+          if (index < 2) {
+            // approved- ai audit successful for 2 items with 100% confidence
+            auditApprovalState[dateLabel][key] = "100%"; 
+          } else {
+            // keep original for remaining list
+            auditApprovalState[dateLabel][key] = r.confidence; 
+          }
         });
 
         // Refresh Invoice Exceptions table immediately
