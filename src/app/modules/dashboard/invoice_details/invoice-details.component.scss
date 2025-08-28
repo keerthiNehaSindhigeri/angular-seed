@@ -1,0 +1,17 @@
+.text-pair {
+  justify-content: start;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1px;
+  font-family: 'Roboto';
+  font-size: 11px;
+  color: black;
+}
+
+.label {
+  font-weight: 600; // semibold for label
+}
+
+.value {
+  font-weight: 400; // normal for value
+}
