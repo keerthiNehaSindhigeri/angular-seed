@@ -72,12 +72,51 @@
 
 }
 
-.text-style {
+.text-header-style {
   font-family: Roboto Slab;
   font-style: bold;
   font-weight: 700;
   font-size: 15px;
   line-height: 18px;
   color: #51A5DC;
-  margin-bottom: 10px;
+}
+
+.footer-text {
+  font-family: Roboto Slab;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 4px;
+  background: #2b70a6;
+  font-size: 12px;
+  border: 1px solid black;
+  padding: 4px 10px;
+  font-weight: bold;
+  color: white
+}
+
+.black-text {
+  color: black;
+  font-family: Roboto slab;
+  font-weight: 500;
+  font-size: 20px;
+  font-style: Medium;
+
+}
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.7);
+  z-index: 9999;
+}
+
+.loader.hide {
+  display: none;
 }

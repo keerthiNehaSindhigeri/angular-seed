@@ -1,17 +1,38 @@
-.text-pair {
-  justify-content: start;
-  align-items: center;
-  gap: 10px;
+.label {
+  font-weight: 600;
   margin-bottom: 1px;
-  font-family: 'Roboto';
+  margin-right: 5px;
   font-size: 11px;
   color: black;
 }
 
-.label {
-  font-weight: 600; // semibold for label
+.value {
+  font-weight: 400;
+  margin-right: 5px;
+  margin-bottom: 1px;
+  font-size: 11px;
+  color: black;
 }
 
-.value {
-  font-weight: 400; // normal for value
+.outline-container {
+  position: relative;
+  border: 1px solid black;
+  border-radius: 4px;
+  padding-bottom: 16px;
+  padding-top: 16px;
+  padding-left: 7px;
+  padding-right: 7px;
+  margin-right: 20px;
+  width: 300px;
+}
+
+.overlay-text {
+  position: absolute;
+  top: -10px;
+  left: 12px;
+  background: white;
+  padding: 2px 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: black;
 }

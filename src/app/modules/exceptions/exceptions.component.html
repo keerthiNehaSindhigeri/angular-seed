@@ -1,1 +1,50 @@
-<p>exceptions.component works!</p>
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th [attr.colspan]="model.daysInMonth">{{ model.monthName }}</th>
+
+    </tr>
+    <tr>
+      <th></th>
+      @for (day of [].constructor(model.daysInMonth); let i = $index;track day) {
+      <th>{{ i + 1 }}</th>
+      }
+    </tr>
+  </thead>
+
+  <tbody>
+    @for (row of model.rows; track row.title) {
+    <tr>
+      <td>
+        {{ row.title }}
+        <img [src]="row.helpIcon" alt="Help Icon">
+      </td>
+      @for (day of [].constructor(model.daysInMonth); let d = $index;track day) {
+      <td>
+        @if (row.values[d + 1]) {
+          <p  class="error-text" (click)="onButtonClick(d)">{{ row.values[d + 1] }}</p>
+        }
+      </td>
+      }
+    </tr>
+    }
+  </tbody>
+
+  <tfoot>
+    <tr>
+      <td>View Attachments</td>
+      @for (day of [].constructor(model.daysInMonth);track day) {
+      <td></td>
+      }
+    </tr>
+    <tr>
+      <td>Messages</td>
+      @for (day of [].constructor(model.daysInMonth);track day) {
+      <td>
+        <img src="assets/images/dropdown.png" class="cursor-pointer" alt="">
+      </td>
+      }
+    </tr>
+  </tfoot>
+</table>
