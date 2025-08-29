@@ -1,8 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ExceptionModel, ExceptionRow } from './exceptions.interface';
 
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog,MatDialogState } from '@angular/material/dialog';
 import { AiAuditComponent } from '../ai-audit/ai-audit.component';
+import { AlertDialogComponent } from '../alert-dialog/alert-dialog.component';
 
 @Component({
   selector: 'app-exceptions',
@@ -42,6 +43,24 @@ export class ExceptionsComponent implements OnInit {
   private readonly dialog = inject(MatDialog);
   ngOnInit(): void { }
   onButtonClick(day: number): void {
-    this.dialog.open(AiAuditComponent);
+    const loaderDialogRef = this.dialog.open(AlertDialogComponent, {
+      width: '400px',
+      disableClose: true
+    });
+
+    const timeoutId = setTimeout(() => {
+      if (loaderDialogRef.getState() === MatDialogState.CLOSED) return; // Cancelled
+      loaderDialogRef.close();
+      this.dialog.open(AiAuditComponent, {
+        width: '800px',
+        disableClose: true,
+        data: { day }
+      });
+    }, 2000);
+
+    loaderDialogRef.afterClosed().subscribe(() => {
+      clearTimeout(timeoutId); // Cancel timer when loader is closed
+    });
   }
+
 }

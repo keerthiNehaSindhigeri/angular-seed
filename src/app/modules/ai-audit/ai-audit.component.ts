@@ -1,16 +1,16 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { AlertDialogComponent } from '../alert-dialog/alert-dialog.component';
+import { Component, OnInit, inject,Inject } from '@angular/core';
+import { MatDialogRef,MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-ai-audit',
   standalone: true,
-  imports: [AlertDialogComponent],
+  imports: [],
   templateUrl: './ai-audit.component.html',
   styleUrl: './ai-audit.component.scss'
 })
 export class AiAuditComponent implements OnInit {
-  isLoading = false;
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { day: number }) { }
+
   private dialogRef = inject(MatDialogRef<AiAuditComponent>);
 
   ngOnInit(): void {
@@ -18,11 +18,9 @@ export class AiAuditComponent implements OnInit {
   }
 
   startAudit(): void {
-    this.isLoading = true;
-
-    setTimeout(() => {
-      this.isLoading = false;
-      this.dialogRef.close();
-    }, 2000);
+    // Simulate AI audit process
+  }
+  onCancel(): void {
+    this.dialogRef.close({ cancelled: true });
   }
 }

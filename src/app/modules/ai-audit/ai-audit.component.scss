@@ -1,7 +1,8 @@
-.loader-container {
+.audit-container {
+  display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: start;
+  align-items: start;
   height: 300px;
   width: 300px;
 }
