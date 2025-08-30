@@ -1,0 +1,27 @@
+<div class="page-container">
+
+  <h4 class="header-container">Find Invoice</h4>
+  <div class="input-container">
+
+    <div class="text-container">API invoice number:</div>
+    <input type="number" max="6" placeholder="123456" class="custom-hint input-field" />
+
+    <button class="btn btn-primary" (click)="onButtonClick()">Search</button>
+
+  </div>
+
+  <div class="text-header-style mb-20 fs-12 ">Tax Invoice - Submitted</div>
+
+  <app-invoice-details></app-invoice-details>
+  <div class="text-header-style mt-40 mb-2">Invoice Exceptions</div>
+  <app-exceptions></app-exceptions>
+  <div class="footer-text mt-40 mb-100">
+    Detected Attachments
+    <div>
+      <img width="16" height="16" src="assets/images/plus.png" alt="Attachment Icon" />
+    </div>
+
+  </div>
+
+</div>
+
