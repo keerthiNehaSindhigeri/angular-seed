@@ -1,59 +1,56 @@
 # EinvoiceClient
 
+This repository contains two main parts:
+
+## 1. Native Web App (web-app-native)
+- Located in the **`web-app-native`** folder.
+- Built using basic **HTML, CSS, and JavaScript** without any frameworks.
+- Ideal for quick static websites or simple prototypes.
+
+### How to use
+- Navigate to the `web-app-native` folder.
+- Open `request_occupancy_report.html` in a browser to run the app.
+- Modify the HTML, CSS, and JS files to customize.
+
+## 2. Angular Project (src/app/)
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.2.0.
 
-## Development server
-
+### Development server
 To start a local development server, run:
-
-```bash
 ng serve
-```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+text
+Open your browser to `http://localhost:4200/dashboard`. The app will reload automatically on source file changes.
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
+### Code scaffolding
+Generate new components with Angular CLI:
 ng generate component component-name
-```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
+text
+For all schematic options (components, directives, pipes, etc.), run:
 ng generate --help
-```
 
-## Building
+text
 
-To build the project run:
-
-```bash
+### Building
+To build the Angular project run:
 ng build
-```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+text
+Build artifacts will be stored in the `dist/` directory. The production build optimizes for performance.
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
+### Running unit tests
+Execute unit tests with Karma:
 ng test
-```
 
-## Running end-to-end tests
+text
 
-For end-to-end (e2e) testing, run:
-
-```bash
+### Running end-to-end tests
+Run end-to-end tests with:
 ng e2e
-```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+text
+Angular CLI does not include an e2e testing framework by default; you can add one as needed.
 
 ## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+For detailed Angular CLI usage, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
